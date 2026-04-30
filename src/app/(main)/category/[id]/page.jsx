@@ -11,8 +11,10 @@ const NewsCategoryPage = async ({ params }) => {
   const categories = await getCategories();
   const news = await getNewsByCategoryId(id);
 
+  
+
   return (
-    <div className="container mx-auto grid grid-cols-12 gap-4 my-[60px]">
+    <div className="container mx-auto grid grid-cols-12 gap-4 my-15">
       <div className=" col-span-3">
         <LeftSidebar categories={categories} activeId={id} />
       </div>
