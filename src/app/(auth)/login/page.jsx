@@ -1,5 +1,6 @@
 'use client'
 import { authClient } from '@/lib/auth-client';
+import { ErrorBoundary } from 'next/dist/client/components/error-boundary';
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -24,6 +25,14 @@ const LoginPage = () => {
         });
 
         console.log(res,error);
+
+        if(error){
+            alert(error.message);
+        }
+
+        if(res){
+            alert("Sign in successful");
+        }
         
         
     }
