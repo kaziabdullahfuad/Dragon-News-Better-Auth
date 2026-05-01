@@ -1,7 +1,9 @@
 'use client'
+import { authClient } from '@/lib/auth-client';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const RegisterPage = () => {
 
@@ -9,9 +11,28 @@ const RegisterPage = () => {
             watch,
         formState:{errors}}=useForm();
 
-    const handleRegisterFunc=(data)=>{
+    const [isShowPassword,setIsShowPassword]=useState(false);
+
+    const handleRegisterFunc=async (data)=>{
         console.log(data);
         const {email,name,photo,password}=data;
+
+        const {data: res,error}= await authClient.signUp.email({
+            name: name, // required
+            email: email, // required
+            password: password, // required
+            image: photo,
+            callbackURL: "/",
+        })
+        
+        console.log(res,error);
+        if(error){
+            alert(error.message)
+        }
+
+        if(res){
+            alert("Signup Successful");
+        }
         
     }
 
@@ -52,12 +73,19 @@ const RegisterPage = () => {
                     
                     </fieldset>
 
-                    <fieldset className="fieldset">
+                    <fieldset className="fieldset relative">
                     <legend className="fieldset-legend">Password</legend>
-                    <input type="password" className="input" placeholder="Type your passwords"
+                    <input type={isShowPassword ? "text" : "password"}  className="input" placeholder="Type your passwords"
                      {...register("password",{required:"Password Field is required"})}
                     />
+
+                     <span className='absolute right-8 top-3 cursor-pointer' onClick={()=>setIsShowPassword(!isShowPassword)}>
+                    
+                        {isShowPassword ? <FaEye></FaEye> : <FaEyeSlash></FaEyeSlash>}
+                    </span>
+                    
                     {errors.password && <p className='text-red-500'>{errors.password.message}</p> }
+
                     
                     </fieldset>
 
